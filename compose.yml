@@ -1,0 +1,39 @@
+version: "3.9"
+services:
+  primary:
+    build: primary/
+    ports:
+      - "5000:5000"
+    container_name: primary_node
+    environment:
+      - SECONDARY_1=http://secondary_1:5001
+      - SECONDARY_2=http://secondary_2:5001
+    command: ["app.py" ]
+    networks:
+      - repl_log_net
+  secondary_1:
+    build: secondary/
+    ports:
+      - "5001:5001"
+    container_name: secondary_1
+    environment:
+      - PRIMARY=http://primary:5000
+    depends_on:
+      - primary
+    command: ["app.py" ]
+    networks:
+      - repl_log_net
+  secondary_2:
+    build: secondary/
+    ports:
+      - "5002:5001"
+    container_name: secondary_2
+    environment:
+      - PRIMARY=http://primary:5000
+    depends_on:
+      - primary
+    command: ["app.py" ]
+    networks:
+      - repl_log_net
+networks:
+  repl_log_net:
