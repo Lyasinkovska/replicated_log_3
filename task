@@ -1,5 +1,5 @@
 Iteration 1.
-10 points
+
 The Replicated Log should have the following deployment architecture: one Master and any number of Secondaries.
 
 
