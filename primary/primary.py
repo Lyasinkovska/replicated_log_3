@@ -11,7 +11,7 @@ logging.basicConfig(
     level=logging.DEBUG,
     format="%(asctime)s [%(levelname)s] %(message)s",
     handlers=[
-        logging.FileHandler("primaty.log"),
+        logging.FileHandler("primary.log"),
         logging.StreamHandler(),
     ],
 )
@@ -26,9 +26,12 @@ class Primary:
         self.message_counter = self.message_counter + 1
         self.message_holder.append(self.message_counter, message)
         logging.info(f"Secondary nodes: {secondary_nodes}")
-        for sec_node in secondary_nodes:
-            asyncio.run(self.send_message(sec_node, message))
+        asyncio.run(self.__gather_tasks(message))
         return self.message_counter
+
+    async def __gather_tasks(self, message):
+        tasks = [asyncio.create_task(self.send_message(sec_node, message)) for sec_node in secondary_nodes]
+        await asyncio.gather(*tasks)
 
     async def send_message(self, secondary_url, message):
         secondary_url = f"{secondary_url}/add_message"
