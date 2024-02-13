@@ -1,6 +1,12 @@
+import asyncio
+import os
+import time
+from threading import Condition
+
 from flask import Flask, request, make_response, jsonify
 
 from secondary import Secondary
+# Condition
 
 app = Flask(__name__)
 secondary = None
@@ -15,8 +21,11 @@ def get_messages():
 
 
 @app.route('/add_message', methods=['POST'])
-def add_message():
+async def add_message():
+    app.logger.info(f'secondary request: {request.json}')
     msg_id, message = request.json['msg_id'], request.json['message']
+    delay = int(os.getenv("DELAY"))
+    await asyncio.sleep(delay)
     saved = secondary.add_message(msg_id, message)
     resp_body = {"summary": f"Message saved with id {msg_id}"}
     if not saved:

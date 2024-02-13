@@ -18,6 +18,7 @@ services:
     container_name: secondary_1
     environment:
       - PRIMARY=http://primary:5000
+      - DELAY=5
     depends_on:
       - primary
     command: ["app.py" ]
@@ -30,6 +31,7 @@ services:
     container_name: secondary_2
     environment:
       - PRIMARY=http://primary:5000
+      - DELAY=10
     depends_on:
       - primary
     command: ["app.py" ]

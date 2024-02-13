@@ -1,6 +1,7 @@
 Iteration 2.
 20 points
-In the previous iteration, the replication was blocking for all secondaries, i.e. to return a response to the client we should receive acknowledgements (ACK) from all secondaries.
+In the previous iteration, the replication was blocking for all secondaries, i.e. to return a response to the client
+ we should receive acknowledgements (ACK) from all secondaries.
 
 
 Current iteration should provide tunable semi-synchronicity for replication, by defining write concern parameters.
@@ -10,7 +11,8 @@ w = 1 - only from master
 w = 2 - from master and one secondary
 w = 3 - from master and two secondaries
 
-Please emulate replicas inconsistency (and eventual consistency) with the master by introducing the artificial delay on the secondary node. In this case, the master and secondary should temporarily return different messages lists.
+Please emulate replicas inconsistency (and eventual consistency) with the master by introducing the artificial
+delay on the secondary node. In this case, the master and secondary should temporarily return different messages lists.
 Add logic for messages deduplication and to guarantee the total ordering of messages.
 
 
