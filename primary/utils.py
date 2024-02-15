@@ -1,15 +1,7 @@
 import logging
 from asyncio import Condition
 from collections import OrderedDict
-
-logging.basicConfig(
-    level=logging.DEBUG,
-    format="%(asctime)s [%(levelname)s] %(message)s",
-    handlers=[
-        logging.FileHandler("primary.log"),
-        logging.StreamHandler(),
-    ],
-)
+from replicated_logger import logger
 
 
 class MessageHolder:
@@ -21,7 +13,7 @@ class MessageHolder:
         self.messages[msg_id] = {"id": msg_id, "content": content}
 
     def get_messages(self):
-        return self.messages.values()
+        return [message for message in self.messages.values()]
 
     def generate_id(self):
         self.message_counter += 1

@@ -1,14 +1,6 @@
-import logging
 from utils import MessageHolder
 
-logging.basicConfig(
-    level=logging.DEBUG,
-    format="%(asctime)s [%(levelname)s] %(message)s",
-    handlers=[
-        logging.FileHandler("secondary.log"),
-        logging.StreamHandler(),
-    ],
-)
+from replicated_logger import logger
 
 
 class Secondary:
