@@ -6,6 +6,8 @@ services:
       - "5000:5000"
     container_name: primary_node
     environment:
+      - HOST=0.0.0.0
+      - PORT=5000
       - SECONDARY_1=http://secondary_1:5001
       - SECONDARY_2=http://secondary_2:5001
     command: ["app.py" ]
@@ -18,6 +20,9 @@ services:
     container_name: secondary_1
     environment:
       - PRIMARY=http://primary:5000
+      - HOST=0.0.0.0
+      - PORT=5001
+      - DELAY=5
     depends_on:
       - primary
     command: ["app.py" ]
@@ -30,6 +35,9 @@ services:
     container_name: secondary_2
     environment:
       - PRIMARY=http://primary:5000
+      - HOST=0.0.0.0
+      - PORT=5001
+      - DELAY=10
     depends_on:
       - primary
     command: ["app.py" ]
