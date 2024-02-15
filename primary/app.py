@@ -1,7 +1,5 @@
 import os
-
 from flask import Flask, request, make_response, jsonify
-
 from primary import Primary
 from utils import MessageHolder, CountDownLatch
 from replicated_logger import logger
