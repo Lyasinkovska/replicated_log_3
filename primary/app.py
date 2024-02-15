@@ -1,6 +1,3 @@
-import asyncio
-import logging
-
 from flask import Flask, request, make_response, jsonify
 
 from primary import Primary
@@ -22,26 +19,13 @@ def get_messages():
 async def add_message():
     message, write_concern = request.json['message'], request.json['write_concern']
     latch = CountDownLatch(write_concern)
-    msg_id = await primary.add_message(message, latch=latch)
-    # await primary.save_message(msg_id, message)
-    await primary.create_tasks(msg_id, message, write_concern)
+    msg_id = primary.get_id(latch)
+    await primary.create_tasks(msg_id, message)
     resp_body = {"summary": f"Message saved with id {msg_id}"}
     if not msg_id:
-        resp_body["summary"] = ("Message was not save"
-                                "d")
+        resp_body["summary"] = ("Message was not saved")
     app.logger.info(resp_body["summary"])
     return make_response(jsonify(resp_body), 200)
-
-
-# @app.route('/save_message', methods=['POST'])
-# async def save_message():
-#     app.logger.info(f'secondary request: {request.json}')
-#     msg_id, message = request.json['msg_id'], request.json['message']
-#     primary.message_holder.append(msg_id, message)
-#     resp_body = {"summary": f"Message saved with id {msg_id}"}
-#     app.logger.info(resp_body["summary"])
-#     response = make_response(jsonify(resp_body), 200)
-#     return response
 
 
 if __name__ == '__main__':

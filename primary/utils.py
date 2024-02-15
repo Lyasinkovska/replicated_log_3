@@ -1,4 +1,3 @@
-import asyncio
 import logging
 from asyncio import Condition
 from collections import OrderedDict
@@ -16,40 +15,33 @@ logging.basicConfig(
 class MessageHolder:
     def __init__(self):
         self.messages = OrderedDict()
+        self.message_counter = 0
 
     def append(self, msg_id, content):
         self.messages[msg_id] = {"id": msg_id, "content": content}
-        # await asyncio.sleep(5)
 
     def get_messages(self):
-        return [message for message in self.messages.values()]
+        return self.messages.values()
+
+    def generate_id(self):
+        self.message_counter += 1
+        return self.message_counter
 
 
 class CountDownLatch:
     def __init__(self, count=1):
         self.count = count
-        self.lock = Condition()
+        self.condition = Condition()
 
     async def count_down(self):
-        await self.lock.acquire()
-        # if self.count == 0:
-        #     self.lock.release()
-        #     return
-        logging.info(f'1 before count_down {self.count}')
+        await self.condition.acquire()
         self.count -= 1
-        logging.info(f'2 after count_down {self.count}')
         if self.count <= 0:
-            logging.info(f'3 self.count count_down {self.count}')
-            self.lock.notify_all()
-        self.lock.release()
+            self.condition.notify_all()
+        self.condition.release()
 
     async def wait(self):
-        logging.debug(f'in wait {self.count}')
-        await self.lock.acquire()
+        await self.condition.acquire()
         while self.count > 0:
-            # self.lock.release()
-            # return
-            # while self.count > 0:
-            #     logging.info(f'self.count wait {self.count}')
-            await self.lock.wait()
-        self.lock.release()
+            await self.condition.wait()
+        self.condition.release()
