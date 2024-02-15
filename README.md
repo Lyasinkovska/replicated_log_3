@@ -1,7 +1,7 @@
 # Replicated Log
 Client-Server application that includes primary node and two secondary nodes. 
 
-![Architecture](replicated_log_2.jpg)
+![Architecture](replicated_log_2.png)
 
 # How to use
 To run application use the following command:
